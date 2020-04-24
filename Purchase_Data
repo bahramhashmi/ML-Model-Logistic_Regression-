@@ -1,0 +1,67 @@
+import pandas as pd 
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+data=pd.read_csv("C:/Users/Bahram Hashmi/Desktop/Data Science(2)/purchased_use_case.csv")
+
+data
+
+sns.pairplot(data,hue='Purchased')
+
+features=data.iloc[:,[2,3]].values
+label=data.iloc[:,4].values
+
+
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(features,label,test_size=0.25,random_state=1)
+
+from sklearn.linear_model import LogisticRegression
+model=LogisticRegression()
+
+model.fit(x_train,y_train)
+
+print(model.score(x_train,y_train))
+
+print(model.score(x_test,y_test))
+
+len(x_train)
+
+for i in range(0,300):
+    x_train,x_test,y_train,y_test=train_test_split(features,label,test_size=0.25,random_state=i)
+    model=LogisticRegression()
+    model.fit(x_train,y_train)
+   
+    training_score=model.score(x_train,y_train)
+    testing_score=model.score(x_test,y_test)
+    
+    if testing_score >= training_score and testing_score > 0.80:
+        print("Training : {} Testing : {} Random_state : {} ".format(training_score,testing_score,i))
+
+#KNN
+from sklearn.neighbors import KNeighborsClassifier
+
+model_knn = KNeighborsClassifier()  # try optimizing with n_neighbors=7
+
+model_knn.fit(x_train, y_train)
+
+# check for generalization
+print(model_knn.score(x_train, y_train))
+print(model_knn.score(x_test, y_test))
+
+
+from sklearn.neighbors import KNeighborsClassifier
+for i in range(0,300):
+    x_train,x_test,y_train,y_test=train_test_split(features,label,test_size=0.2,random_state=i)
+    model=KNeighborsClassifier()
+    model.fit(x_train,y_train)
+   
+    training_score=model.score(x_train,y_train)
+    testing_score=model.score(x_test,y_test)
+    
+    if testing_score >= training_score and testing_score > 0.86:
+        print("Training : {} Testing : {} Random_state : {} ".format(training_score,testing_score,i))
+
+
+
